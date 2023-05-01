@@ -1,0 +1,180 @@
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>Моя первая страница</title>
+  </head>
+  <body>
+    <div class="header">
+        <a>{{request.user}}</a>
+        <!----<a>Профиль</a>----->
+        <a href="{% url 'logout' %}">Выйти</a>
+    </div>
+    <div class="chat">
+        <div class="messages">
+            <div class="message">
+                <img class="photo">
+                <div class="messageContainer">
+                    <p class="name">Имя Фамилия</p>
+                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
+                    <div class="dateAndButton">
+                        <p class="date">23:50 15.01.2022</p>
+                        <button>Редактировать</button>
+                    </div>
+                </div>
+            </div>
+            <div class="message your">
+                <img class="photo">
+                <div class="messageContainer">
+                    <p class="name">Имя Фамилия</p>
+                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
+                    <div class="dateAndButton">
+                        <p class="date">23:50 15.01.2022</p>
+                        <button>Редактировать</button>
+                    </div>
+                </div>
+            </div>
+            <div class="message">
+                <img class="photo">
+                <div class="messageContainer">
+                    <p class="name">Имя Фамилия</p>
+                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
+                    <div class="dateAndButton">
+                        <p class="date">23:50 15.01.2022</p>
+                        <button>Редактировать</button>
+                    </div>
+                </div>
+            </div>
+            <div class="message">
+                <img class="photo">
+                <div class="messageContainer">
+                    <p class="name">Имя Фамилия</p>
+                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
+                    <div class="dateAndButton">
+                        <p class="date">23:50 15.01.2022</p>
+                        <button>Редактировать</button>
+                    </div>
+                </div>
+            </div>
+            <div class="message">
+                <img class="photo">
+                <div class="messageContainer">
+                    <p class="name">Имя Фамилия</p>
+                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
+                    <div class="dateAndButton">
+                        <p class="date">23:50 15.01.2022</p>
+                        <button>Редактировать</button>
+                    </div>
+                </div>
+            </div>
+            <div class="message">
+                <img class="photo">
+                <div class="messageContainer">
+                    <p class="name">Имя Фамилия</p>
+                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
+                    <div class="dateAndButton">
+                        <p class="date">23:50 15.01.2022</p>
+                        <button>Редактировать</button>
+                    </div>
+                </div>
+            </div>
+            <div class="message">
+                <img class="photo">
+                <div class="messageContainer">
+                    <p class="name">Имя Фамилия</p>
+                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
+                    <div class="dateAndButton">
+                        <p class="date">23:50 15.01.2022</p>
+                        <button>Редактировать</button>
+                    </div>
+                </div>
+            </div>
+            <div class="message">
+                <img class="photo">
+                <div class="messageContainer">
+                    <p class="name">Имя Фамилия</p>
+                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
+                    <div class="dateAndButton">
+                        <p class="date">23:50 15.01.2022</p>
+                        <button>Редактировать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="sendMessage">
+            <form>
+                <textarea></textarea>
+                <button>Отправить</button>
+            </form>
+        </div>
+
+    </div>
+    <style>
+        
+        .header{
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin: 50px auto;
+        }
+        .chat{
+            background-color: aliceblue;
+            width: 80%;
+            margin: 50px auto;
+            height: 80vh;
+        }
+        .message{
+            width: 80%;
+            background-color: antiquewhite;
+            padding: 15px;
+            margin: 15px 30px 15px auto;
+        }
+        .message p{
+            margin: 10px 0px ;
+        }
+        .message.your{
+            width: 80%;
+            background-color: rgb(203, 239, 255);
+            padding: 15px;
+            margin: 15px 30px;
+        }
+        .messages{
+            overflow-y: scroll;
+            height: 85%;            
+        }
+        #sendMessage{
+            height: 15%;
+            background-color: azure;
+            width: 100%;        
+        }
+        #sendMessage form{
+            display: flex;
+            padding: 20px;
+            height: 100%;
+        }
+        #sendMessage textarea{
+            width: 80%;
+            height: calc( 100% - 40px)
+        }
+        #sendMessage button{
+            width: 20%;
+            height: calc( 100% - 40px)
+        }
+        .dateAndButton{
+            display: flex;
+            justify-content: space-between;
+        }
+        .message.your button{
+            display: block;
+        }
+        .message button{
+            display: none;
+        }
+
+
+    </style>
+    <script type="text/javascript">
+        var block = document.getElementsByClassName("messages")[0];
+        block.scrollTop = block.scrollHeight;
+    </script>
+  </body>
+</html>

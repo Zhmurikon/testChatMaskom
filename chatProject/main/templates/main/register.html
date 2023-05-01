@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="header"><h2>Регистрация</h2></div>
+    <form method="post" action="">
+        {% csrf_token %}
+        {% for f in form %}
+            {{f.label}}
+            {{f}}
+        {% endfor %}
+    <div id="linkDiv"><a id="linkTO" href="{% url 'login' %}">Войти в существующий аккаунт</a></div>
+    </form>
+    {{form.errors}}
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin:  60px auto;
+        }
+        form input{
+            margin: 10px 0 20px 0;
+            height: 30px;
+        }
+        form button{
+            margin: 40px 0;
+            height: 30px;
+        }
+        #header{
+            display: flex;
+            margin: 30px;
+            justify-content: center;
+        }
+        #linkDiv{
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</body>
+</html>
