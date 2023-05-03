@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Настройки Профиля</title>
+</head>
+<body>
+    <div id="header"><h2>Настройки профиля</h2></div>
+    <div id="imgDiv"><img id="profileImg" src="{{request.user.profile.profilePic.url}}"></div>
+    <form method="post" action="" enctype="multipart/form-data">
+        <h4>Фотография пользователя</h4>
+        {% csrf_token %}
+        {% for f in form %}
+            {{f}}
+        {% endfor %}
+        <br>
+    <button type="submit" name="setSettings" style="width: 400px;">Сохранить</button>
+    </form>
+    {{form.errors}}
+    <div id="linkDiv"><a id="linkTO" href="{% url 'chat' %}">Войти в чат</a></div>
+    <div id="logDiv">
+        <h4>Журнал посещений</h4>
+        {% for l in logs reversed %}
+        <p>{{l.dateLoged}}</p>
+        {% endfor %}
+    </div>
+
+    <style>
+        form {
+            /*display: flex;*/
+            flex-direction: column;
+            max-width: 400px;
+            margin:  60px auto;
+        }
+        #logDiv{
+            width:400px;
+            margin: 150px auto;
+        }
+        #profileImg{
+            width: 100px;
+            height: 100px;
+        }
+        #imgDiv{
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            border-radius: 50%;
+            margin: auto;
+        }
+        form input{
+            margin: 10px 0 20px 0;
+            height: 30px;
+        }
+        form button{
+            margin: 40px 0;
+            height: 30px;
+        }
+        #header{
+            display: flex;
+            margin: 30px;
+            justify-content: center;
+        }
+        #linkDiv{
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</body>
+</html>

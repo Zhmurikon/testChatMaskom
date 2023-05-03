@@ -12,8 +12,9 @@
             {{f.label}}
             {{f}}
         {% endfor %}
-    <div id="linkDiv"><a id="linkTO" href="{% url 'login' %}">Войти в существующий аккаунт</a></div>
+        <button type="submit" name="createUser">Зарегистрироваться</button>
     </form>
+    <div id="linkDiv"><a id="linkTO" href="{% url 'login' %}">Войти в существующий аккаунт</a></div>
     {{form.errors}}
     <style>
         form {

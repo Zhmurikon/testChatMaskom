@@ -2,114 +2,132 @@
   <head>
     <meta charset="UTF-8">
     <title>Моя первая страница</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   </head>
   <body>
-    <div class="header">
-        <a>{{request.user}}</a>
+  <div id="upline"></div>
+  <div id="popup" style="display:none">
+    <div id="popupDiv">
+        <div id="changeForm">
+            <input type="hidden" id="messageIdToChange" value="">
+            <textarea id="changeText"></textarea>
+            <div>
+                <button id="changeButton" onclick="updateMessage() ">Редактировать</button>
+                <button id="canselButton" onclick="closePopup()">Отмена</button>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div id="testtest"></div>
+    <div  class="header">
+        <a href="{% url 'settings' %}" >{{request.user}}</a>
         <!----<a>Профиль</a>----->
         <a href="{% url 'logout' %}">Выйти</a>
     </div>
     <div class="chat">
-        <div class="messages">
-            <div class="message">
-                <img class="photo">
-                <div class="messageContainer">
-                    <p class="name">Имя Фамилия</p>
-                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
-                    <div class="dateAndButton">
-                        <p class="date">23:50 15.01.2022</p>
-                        <button>Редактировать</button>
-                    </div>
-                </div>
-            </div>
-            <div class="message your">
-                <img class="photo">
-                <div class="messageContainer">
-                    <p class="name">Имя Фамилия</p>
-                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
-                    <div class="dateAndButton">
-                        <p class="date">23:50 15.01.2022</p>
-                        <button>Редактировать</button>
-                    </div>
-                </div>
-            </div>
-            <div class="message">
-                <img class="photo">
-                <div class="messageContainer">
-                    <p class="name">Имя Фамилия</p>
-                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
-                    <div class="dateAndButton">
-                        <p class="date">23:50 15.01.2022</p>
-                        <button>Редактировать</button>
-                    </div>
-                </div>
-            </div>
-            <div class="message">
-                <img class="photo">
-                <div class="messageContainer">
-                    <p class="name">Имя Фамилия</p>
-                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
-                    <div class="dateAndButton">
-                        <p class="date">23:50 15.01.2022</p>
-                        <button>Редактировать</button>
-                    </div>
-                </div>
-            </div>
-            <div class="message">
-                <img class="photo">
-                <div class="messageContainer">
-                    <p class="name">Имя Фамилия</p>
-                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
-                    <div class="dateAndButton">
-                        <p class="date">23:50 15.01.2022</p>
-                        <button>Редактировать</button>
-                    </div>
-                </div>
-            </div>
-            <div class="message">
-                <img class="photo">
-                <div class="messageContainer">
-                    <p class="name">Имя Фамилия</p>
-                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
-                    <div class="dateAndButton">
-                        <p class="date">23:50 15.01.2022</p>
-                        <button>Редактировать</button>
-                    </div>
-                </div>
-            </div>
-            <div class="message">
-                <img class="photo">
-                <div class="messageContainer">
-                    <p class="name">Имя Фамилия</p>
-                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
-                    <div class="dateAndButton">
-                        <p class="date">23:50 15.01.2022</p>
-                        <button>Редактировать</button>
-                    </div>
-                </div>
-            </div>
-            <div class="message">
-                <img class="photo">
-                <div class="messageContainer">
-                    <p class="name">Имя Фамилия</p>
-                    <p class="text">Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения Текст Сообщения</p>
-                    <div class="dateAndButton">
-                        <p class="date">23:50 15.01.2022</p>
-                        <button>Редактировать</button>
-                    </div>
-                </div>
-            </div>
+        <div class="messages" id="messagesContainer">
         </div>
         <div id="sendMessage">
-            <form>
-                <textarea></textarea>
-                <button>Отправить</button>
+            <form id="post-form">
+                {% csrf_token %}
+                {% for f in form %}
+                    {{f}}
+                {% endfor %}
+                <button type="submit">Отправить</button>
             </form>
         </div>
-
     </div>
+  <style>
+      #popup{
+        width:100%;
+        height:100%;
+        position:fixed;
+        background-color: rgba(0,0,0,0.7);
+        align-items: center;
+        justify-content: center;
+      }
+      #popupDiv{
+        width: 600px;
+        height: 200px;
+        background-color: cornsilk;
+      }
+      #popupDiv #changeForm{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      #changeText {
+        height: 80%;
+      }
+      #changeButton {
+        height: 100%;
+        width: 50%
+      }
+      #canselButton {
+        height: 100%;
+        width: 50%
+      }
+      #changeForm div{
+        display: flex;
+        height: 20%;
+      }
+  </style>
+    <script>
+$(document).ready(function(){
+
+setInterval(function(){
+    $.ajax({
+        type: 'GET',
+        url : "/getmessage",
+        success: function(response){
+            //console.log(response);
+            $("#messagesContainer").empty();
+            for (var key in response.messagesList)
+            {
+                if (response.messagesList[key].changed == false){
+                    var textToSet = response.messagesList[key].text;
+                    var dateToSet = response.messagesList[key].date_created;
+                }else{
+                    var textToSet = response.messagesList[key].textChanged;
+                    var dateToSet = "отредактировано " + response.messagesList[key].dateChanged;
+                }
+                if ({{request.user.id}}==response.messagesList[key].user_id){
+                    var temp = '<div class="message your" id="message'+key+'"></div>';
+                }else{
+                    var temp = '<div class="message" id="message'+key+'"></div>';
+                }
+                $("#messagesContainer").append(temp);
+                var img = document.createElement('img');
+                img.src = response.messagesList[key].user_profile;
+                $("#message"+key).append(img);
+                temp = '<div class="messageContainer"> <p class="name">'+response.messagesList[key].username;
+                temp = temp + '</p> <p class="text">'+textToSet;
+                temp = temp + '</p> <div class="dateAndButton"> <p class="date">'+dateToSet;
+                if ({{request.user.id}}==response.messagesList[key].user_id){
+                    temp = temp + '</p> <div style="display: flex"> <button dataid="'+response.messagesList[key].id+'" onclick="deleteMessage(this)">Удалить</button> <button onclick="openPopup(this)" dataid="'+response.messagesList[key].id+'" style="margin-left: 10px">Редактировать</button></div></div>';
+                }else{
+
+                    temp = temp + '</p> <div style="display: flex"></div></div>';
+                }
+                $("#message"+key).append(temp);
+            }
+        },
+        error: function(response){
+            alert('An error occured')
+        }
+    });
+},1000);
+})
+</script>
     <style>
-        
+        body{
+            margin:0;
+        }
+        #upline{
+            width:100%;
+            height: 1px;
+            background-color: rgb(0, 0, 0);
+        }
         .header{
             display: flex;
             justify-content: space-between;
@@ -123,10 +141,17 @@
             height: 80vh;
         }
         .message{
+            display: flex;
+            align-items: flex-start;
             width: 80%;
             background-color: antiquewhite;
             padding: 15px;
             margin: 15px 30px 15px auto;
+        }
+        #messagesContainer img{
+            width: 40px;
+            height: 40px;
+            margin: 10px;
         }
         .message p{
             margin: 10px 0px ;
@@ -167,7 +192,10 @@
             display: block;
         }
         .message button{
-            display: none;
+            display: block;
+        }
+        .messageContainer{
+            width: 100%;
         }
 
 
@@ -176,5 +204,69 @@
         var block = document.getElementsByClassName("messages")[0];
         block.scrollTop = block.scrollHeight;
     </script>
+  <script type="text/javascript">
+  $('textarea[name="text"]').val('');
+  $(document).on('submit','#post-form',function(e){
+    e.preventDefault();
+    $.ajax({
+      type:'POST',
+      url:'/sendmessage',
+      data:{
+          text:$('textarea[name="text"]').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success: function(data){
+         //alert(data)
+      }
+    });
+    $('textarea[name="text"]').val('');
+  });
+</script>
+  <script>
+      function deleteMessage(el){
+      var elId = el.getAttribute('dataid');
+      $.ajax({
+      type:'POST',
+      url:'/deletemessage',
+      data:{
+          id:elId,
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success: function(data){
+         //alert(data)
+      }
+    });
+    }
+
+
+    function openPopup(el){
+        var elId = el.getAttribute('dataid');
+        document.getElementById('popup').style.display = "flex";
+        document.getElementById('messageIdToChange').value = elId;
+    }
+    function closePopup(){
+        document.getElementById('popup').style.display = "none";
+    }
+    function updateMessage(){
+        var messageId = document.getElementById('messageIdToChange').value;
+        $.ajax({
+            type:'POST',
+            url:'/updatemessage',
+            data:{
+                id:messageId,
+                text:$('#changeText').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function(data){
+                //alert(data)
+            }
+        });
+
+
+
+        document.getElementById('popup').style.display = "none";
+    }
+
+  </script>
   </body>
 </html>
