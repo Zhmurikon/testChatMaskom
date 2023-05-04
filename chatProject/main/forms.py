@@ -3,6 +3,10 @@ from django.forms import ModelForm, Textarea
 from django.contrib.auth.models import User
 from .models import Profile, Messages
 
+"""
+    Если у тебя будет много форм лучше создать отдельную папку forms
+    и раскидать их по файлам.
+"""
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:

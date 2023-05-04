@@ -2,6 +2,14 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
 
+"""
+    Если у тебя будет много моделей лучше создать отдельную папку models
+    и раскидать их по файлам.
+
+    По стилю кода +- нормально. Чекни ссылку: 
+        Чекни https://peps.python.org/pep-0008/
+"""
+
 
 # Create your models here.
 class Profile(models.Model):

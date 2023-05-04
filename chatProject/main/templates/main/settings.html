@@ -7,6 +7,7 @@
 <body>
     <div id="header"><h2>Настройки профиля</h2></div>
     <div id="imgDiv"><img id="profileImg" src="{{request.user.profile.profilePic.url}}"></div>
+
     <form method="post" action="" enctype="multipart/form-data">
         <h4>Фотография пользователя</h4>
         {% csrf_token %}
@@ -14,9 +15,10 @@
             {{f}}
         {% endfor %}
         <br>
-    <button type="submit" name="setSettings" style="width: 400px;">Сохранить</button>
+        <button type="submit" name="setSettings" style="width: 400px;">Сохранить</button>
     </form>
     {{form.errors}}
+
     <div id="linkDiv"><a id="linkTO" href="{% url 'chat' %}">Войти в чат</a></div>
     <div id="logDiv">
         <h4>Журнал посещений</h4>
@@ -26,6 +28,7 @@
     </div>
 
     <style>
+        /* Лучще вынести в отдельный файл .css и подключить его в шаблон */
         form {
             /*display: flex;*/
             flex-direction: column;

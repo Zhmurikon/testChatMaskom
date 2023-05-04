@@ -12,14 +12,22 @@ from datetime import datetime
 
 # Create your views here.
 
+"""
+    Если у тебя будет много вьюшек лучше создать отдельную папку views
+    и раскидать их по файлам.
+
+    По стилю кода +- нормально. Чекни ссылку:
+        Чекни https://peps.python.org/pep-0008/
+"""
+
 
 def register(request):
-    form = CustomUserCreationForm()
+    form = CustomUserCreationForm() # <- A?
     if request.user.is_authenticated:
         return redirect('chat')
     else:
         if request.method == 'POST':
-            form = CustomUserCreationForm(request.POST)
+            form = CustomUserCreationForm(request.POST) # <- A?
             if form.is_valid():
                 user = form.save()
                 Profile.objects.create(
@@ -32,8 +40,10 @@ def register(request):
                     password=form.cleaned_data['password1'],
                 )
                 login(request, user)
-                new_log = UserLogs.objects.create(user=user, dateLoged=datetime.now())
-                new_log.save()
+
+                # Когда создаёшь объект через objects.create его не обязательно сохранять и присваивать переменной
+                # если ты не планируешь с ним дальше работать
+                UserLogs.objects.create(user=user, dateLoged=datetime.now())
                 return redirect('settings')
 
         context = {'form': form}
@@ -54,8 +64,9 @@ def login_user(request):
 
             if user is not None:
                 login(request, user)
-                new_log = UserLogs.objects.create(user=user, dateLoged=datetime.now())
-                new_log.save()
+                # Когда создаёшь объект через objects.create его не обязательно сохранять и присваивать переменной
+                # если ты не планируешь с ним дальше работать
+                UserLogs.objects.create(user=user, dateLoged=datetime.now())
                 return redirect('chat')
             else:
                 messages.info(request, 'Неверный логин или пароль')
@@ -71,29 +82,29 @@ def logout_user(request):
 
 @login_required(login_url='login')
 def index(request):
-    form = MessageForm()
-    context = {'form': form}
     if request.method == 'POST':
-        form = MessageForm(request.POST)
+        form = MessageForm(request.POST) # <- А?
         if form.is_valid():
             stock = form.save(commit=False)
             stock.user = request.user
             form.save()
             return redirect('chat')
-    return render(request, 'main/index.html', context)
+    form = MessageForm()  # <- А?
+    context = {'form': form}
+    return render(request, 'main/main.html', context)
 
 
 @login_required(login_url='login')
 def settings(request):
     profile = request.user.profile
-    form = ProfileForm(instance=profile)
-    logs = UserLogs.objects.filter(user=request.user)
-    context = {'form': form, 'logs': logs}
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)  # <- А?
         if form.is_valid():
             form.save()
             return redirect('chat')
+    form = ProfileForm()  # <- А?
+    logs = UserLogs.objects.filter(user=request.user)
+    context = {'form': form, 'logs': logs}
     return render(request, 'main/settings.html', context)
 
 
@@ -101,27 +112,29 @@ def settings(request):
 def sendmessage(request):
     text = request.POST['text']
     user = request.user
-    new_message = Messages.objects.create(user=user, text=text)
-    new_message.save()
+    # Когда создаёшь объект через objects.create его не обязательно сохранять и присваивать переменной
+    # если ты не планируешь с ним дальше работать
+    Messages.objects.create(user=user, text=text)
+    # <- бесполезная строка
     return HttpResponse('message sent')
 
 
 class getmessage(View):
     def get(self, request):
-        messages_all = Messages.objects.all()  # Get all book objects from the database
+        messages_all = Messages.objects.all()  # ?? Get all book objects from the database ??
 
-        messages_serialized_data = []  # to store serialized data
+        messages_serialized_data = []  # ?? to store serialized data ??
         for m in messages_all:
-            user_id = User.objects.get(id=m.user_id)
+            user_id = User.objects.get(id=m.user_id) # Но это же не user_id а user или нет??)
             username = user_id.username
-            profile_id = Profile.objects.get(user=m.user_id)
-            profilePic = profile_id.profilePic.url
+            profile = Profile.objects.get(user=m.user_id) # Но это же не profile_id а profile или нет??)
+            profile_pic_url = profile.profilePic.url # А это ссылка на картинку) Правильней было бы назвать profile_pic_url
             messages_serialized_data.append({
                 'id': m.id,
                 'user_id': m.user_id,
                 'text': m.text,
                 'username': username,
-                'user_profile': profilePic,
+                'user_profile': profile_pic_url,
                 'date_created': m.dateCreated.strftime('%Y-%m-%d %H:%M'),
                 'changed': m.changed,
                 'dateChanged': m.dateChanged.strftime('%Y-%m-%d %H:%M'),
@@ -138,8 +151,8 @@ class getmessage(View):
 def deletemessage(request):
     message_id = request.POST['id']
     user = request.user.id
-    user_message = Messages.objects.filter(id=message_id, user=user)
-    user_message.delete()
+    # А может просто Messages.objects.filter(...).delete() ?
+    Messages.objects.filter(id=message_id, user=user).delete()
     return HttpResponse('message sent')
 
 
@@ -148,10 +161,11 @@ def updatemessage(request):
     text = request.POST['text']
     message_id = request.POST['id']
     user = request.user
-    update_message = Messages.objects.get(id=message_id, user=user)
-    update_message.textChanged = text
-    update_message.changed = True
-    update_message.dateChanged = datetime.now()
-    update_message.save()
+    # А может просто Messages.objects.get(...).update(...) ?
+    Messages.objects.filter(id=message_id, user=user).update(
+        textChanged=text,
+        changed=True,
+        dateChanged=datetime.now(),
+    )
     return HttpResponse('message saved')
 
