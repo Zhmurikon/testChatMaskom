@@ -1,0 +1,51 @@
+{% load static %}
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Чат</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+    <script>
+        var USER_ID = {{ request.user.id }};
+    </script>
+</head>
+
+<body>
+    <div id="upline"></div>
+    <div id="popup" style="display:none">
+        <div id="popupDiv">
+            <div id="changeForm">
+                <input type="hidden" id="messageIdToChange" value="">
+                <textarea id="changeText"></textarea>
+                <div>
+                    <button id="changeButton" onclick="updateMessage() ">Редактировать</button>
+                    <button id="canselButton" onclick="closePopup()">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="testtest"></div>
+    <div class="header">
+        <a href="{% url 'settings' %}">{{request.user}}</a>
+        <!----<a>Профиль</a>----->
+        <a href="{% url 'logout' %}">Выйти</a>
+    </div>
+    <div class="chat">
+        <div class="messages" id="messagesContainer">
+        </div>
+        <div id="sendMessage">
+            <form id="post-form">
+                {% csrf_token %}
+                {% for f in form %}
+                {{f}}
+                {% endfor %}
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+    </div>
+    <script></script>
+    <script src="{% static 'main/js/main.js' %} "></script>
+</body>
+
+</html>

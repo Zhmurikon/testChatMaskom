@@ -1,0 +1,290 @@
+From a4ec465088341914d787757a838b47860c771921 Mon Sep 17 00:00:00 2001
+From: Vlad <vlad_ok_k@mail.ru>
+Date: Wed, 3 May 2023 13:31:29 +0300
+Subject: [PATCH] check comment
+
+---
+ chatProject/main/forms.py                     |  4 ++
+ chatProject/main/models.py                    |  7 +++
+ chatProject/main/templates/main/index.html    | 18 ++++++++
+ chatProject/main/templates/main/login.html    |  2 +
+ chatProject/main/templates/main/register.html |  2 +
+ chatProject/main/templates/main/settings.html |  5 ++-
+ chatProject/main/views.py                     | 45 +++++++++++++------
+ 7 files changed, 68 insertions(+), 15 deletions(-)
+
+diff --git a/chatProject/main/forms.py b/chatProject/main/forms.py
+index 50464cc..0a148ae 100644
+--- a/chatProject/main/forms.py
++++ b/chatProject/main/forms.py
+@@ -3,6 +3,10 @@ from django.forms import ModelForm, Textarea
+ from django.contrib.auth.models import User
+ from .models import Profile, Messages
+ 
++"""
++    Если у тебя будет много форм лучше создать отдельную папку forms
++    и раскидать их по файлам.
++"""
+ 
+ class CustomUserCreationForm(UserCreationForm):
+     class Meta:
+diff --git a/chatProject/main/models.py b/chatProject/main/models.py
+index fed632d..905b2d5 100644
+--- a/chatProject/main/models.py
++++ b/chatProject/main/models.py
+@@ -2,6 +2,13 @@ from django.db import models
+ from datetime import datetime
+ from django.contrib.auth.models import User
+ 
++"""
++    Если у тебя будет много моделей лучше создать отдельную папку models
++    и раскидать их по файлам.
++
++    По стилю кода +- нормально. Чекни ссылку:
++        Чекни https://peps.python.org/pep-0008/
++"""
+ 
+ # Create your models here.
+ class Profile(models.Model):
+diff --git a/chatProject/main/templates/main/index.html b/chatProject/main/templates/main/index.html
+index f62d0a6..ec38a18 100644
+--- a/chatProject/main/templates/main/index.html
++++ b/chatProject/main/templates/main/index.html
+@@ -1,3 +1,4 @@
++<!-- Что с отступами в коде? -->
+ <html lang="ru">
+   <head>
+     <meta charset="UTF-8">
+@@ -38,6 +39,8 @@
+         </div>
+     </div>
+   <style>
++    /* Лучще вынести в отдельный файл .css и подключить его в шаблон */
++
+       #popup{
+         width:100%;
+         height:100%;
+@@ -73,6 +76,17 @@
+       }
+   </style>
+     <script>
++    /*  Лучше вынести в отдельный файл .js и подключить его в шаблон.
++        Если у тебя есть необходимость забирать параметры из django
++        то просто объяви в head переменную и присвой ей значение
++        и дальше используй её где угодно.
++
++        <head>
++            <script>
++                var USER_ID = {{ request.user.id }};
++            <//script> <- не смотри что там два слэша
++        </head>
++    */
+ $(document).ready(function(){
+ 
+ setInterval(function(){
+@@ -120,6 +134,7 @@ setInterval(function(){
+ })
+ </script>
+     <style>
++        /* Лучще вынести в отдельный файл .css и подключить его в шаблон */
+         body{
+             margin:0;
+         }
+@@ -200,6 +215,9 @@ setInterval(function(){
+ 
+ 
+     </style>
++    <!-- Что здесь происходит? Почему тут так много блоков script, почему нельзя было всё в один блок объединить? 
++        А лучше в отдельный js файл
++    -->
+     <script type="text/javascript">
+         var block = document.getElementsByClassName("messages")[0];
+         block.scrollTop = block.scrollHeight;
+diff --git a/chatProject/main/templates/main/login.html b/chatProject/main/templates/main/login.html
+index 66988d3..ce3bc45 100644
+--- a/chatProject/main/templates/main/login.html
++++ b/chatProject/main/templates/main/login.html
+@@ -20,6 +20,8 @@
+             <p id="messages">{{m}}</p>
+     {% endfor %}
+     <style>
++        /* Лучще вынести в отдельный файл .css и подключить его в шаблон */
++
+         form {
+             display: flex;
+             flex-direction: column;
+diff --git a/chatProject/main/templates/main/register.html b/chatProject/main/templates/main/register.html
+index 9987207..0948408 100644
+--- a/chatProject/main/templates/main/register.html
++++ b/chatProject/main/templates/main/register.html
+@@ -17,6 +17,8 @@
+     <div id="linkDiv"><a id="linkTO" href="{% url 'login' %}">Войти в существующий аккаунт</a></div>
+     {{form.errors}}
+     <style>
++        /* Лучще вынести в отдельный файл .css и подключить его в шаблон */
++
+         form {
+             display: flex;
+             flex-direction: column;
+diff --git a/chatProject/main/templates/main/settings.html b/chatProject/main/templates/main/settings.html
+index 370e54d..4f49944 100644
+--- a/chatProject/main/templates/main/settings.html
++++ b/chatProject/main/templates/main/settings.html
+@@ -7,6 +7,7 @@
+ <body>
+     <div id="header"><h2>Настройки профиля</h2></div>
+     <div id="imgDiv"><img id="profileImg" src="{{request.user.profile.profilePic.url}}"></div>
++
+     <form method="post" action="" enctype="multipart/form-data">
+         <h4>Фотография пользователя</h4>
+         {% csrf_token %}
+@@ -14,9 +15,10 @@
+             {{f}}
+         {% endfor %}
+         <br>
+-    <button type="submit" name="setSettings" style="width: 400px;">Сохранить</button>
++        <button type="submit" name="setSettings" style="width: 400px;">Сохранить</button>
+     </form>
+     {{form.errors}}
++
+     <div id="linkDiv"><a id="linkTO" href="{% url 'chat' %}">Войти в чат</a></div>
+     <div id="logDiv">
+         <h4>Журнал посещений</h4>
+@@ -26,6 +28,7 @@
+     </div>
+ 
+     <style>
++        /* Лучще вынести в отдельный файл .css и подключить его в шаблон */
+         form {
+             /*display: flex;*/
+             flex-direction: column;
+diff --git a/chatProject/main/views.py b/chatProject/main/views.py
+index a1aabb2..91fc4e3 100644
+--- a/chatProject/main/views.py
++++ b/chatProject/main/views.py
+@@ -12,14 +12,22 @@ from datetime import datetime
+ 
+ # Create your views here.
+ 
++"""
++    Если у тебя будет много вьюшек лучше создать отдельную папку views
++    и раскидать их по файлам.
++
++    По стилю кода +- нормально. Чекни ссылку:
++        Чекни https://peps.python.org/pep-0008/
++"""
++
+ 
+ def register(request):
+-    form = CustomUserCreationForm()
++    form = CustomUserCreationForm() # <- A?
+     if request.user.is_authenticated:
+         return redirect('chat')
+     else:
+         if request.method == 'POST':
+-            form = CustomUserCreationForm(request.POST)
++            form = CustomUserCreationForm(request.POST) # <- A?
+             if form.is_valid():
+                 user = form.save()
+                 Profile.objects.create(
+@@ -32,8 +40,11 @@ def register(request):
+                     password=form.cleaned_data['password1'],
+                 )
+                 login(request, user)
++
++                # Когда создаёшь объект через objects.create его не обязательно сохранять и присваивать переменной
++                # если ты не планируешь с ним дальше работать
+                 new_log = UserLogs.objects.create(user=user, dateLoged=datetime.now())
+-                new_log.save()
++                new_log.save() # <- бесполезная строка
+                 return redirect('settings')
+ 
+         context = {'form': form}
+@@ -54,8 +65,10 @@ def login_user(request):
+ 
+             if user is not None:
+                 login(request, user)
++                # Когда создаёшь объект через objects.create его не обязательно сохранять и присваивать переменной
++                # если ты не планируешь с ним дальше работать
+                 new_log = UserLogs.objects.create(user=user, dateLoged=datetime.now())
+-                new_log.save()
++                new_log.save() # <- бесполезная строка
+                 return redirect('chat')
+             else:
+                 messages.info(request, 'Неверный логин или пароль')
+@@ -71,10 +84,10 @@ def logout_user(request):
+ 
+ @login_required(login_url='login')
+ def index(request):
+-    form = MessageForm()
++    form = MessageForm() # <- А?
+     context = {'form': form}
+     if request.method == 'POST':
+-        form = MessageForm(request.POST)
++        form = MessageForm(request.POST) # <- А?
+         if form.is_valid():
+             stock = form.save(commit=False)
+             stock.user = request.user
+@@ -86,11 +99,11 @@ def index(request):
+ @login_required(login_url='login')
+ def settings(request):
+     profile = request.user.profile
+-    form = ProfileForm(instance=profile)
++    form = ProfileForm(instance=profile) # <- А?
+     logs = UserLogs.objects.filter(user=request.user)
+     context = {'form': form, 'logs': logs}
+     if request.method == 'POST':
+-        form = ProfileForm(request.POST, request.FILES, instance=profile)
++        form = ProfileForm(request.POST, request.FILES, instance=profile) # <- А?
+         if form.is_valid():
+             form.save()
+             return redirect('chat')
+@@ -101,21 +114,23 @@ def settings(request):
+ def sendmessage(request):
+     text = request.POST['text']
+     user = request.user
++    # Когда создаёшь объект через objects.create его не обязательно сохранять и присваивать переменной
++    # если ты не планируешь с ним дальше работать
+     new_message = Messages.objects.create(user=user, text=text)
+-    new_message.save()
++    new_message.save() # <- бесполезная строка
+     return HttpResponse('message sent')
+ 
+ 
+ class getmessage(View):
+     def get(self, request):
+-        messages_all = Messages.objects.all()  # Get all book objects from the database
++        messages_all = Messages.objects.all()  # ?? Get all book objects from the database ??
+ 
+-        messages_serialized_data = []  # to store serialized data
++        messages_serialized_data = []  # ?? to store serialized data ??
+         for m in messages_all:
+-            user_id = User.objects.get(id=m.user_id)
++            user_id = User.objects.get(id=m.user_id) # Но это же не user_id а user или нет??)
+             username = user_id.username
+-            profile_id = Profile.objects.get(user=m.user_id)
+-            profilePic = profile_id.profilePic.url
++            profile_id = Profile.objects.get(user=m.user_id) # Но это же не profile_id а profile или нет??)
++            profilePic = profile_id.profilePic.url # А это ссылка на картинку) Правильней было бы назвать profile_pic_url
+             messages_serialized_data.append({
+                 'id': m.id,
+                 'user_id': m.user_id,
+@@ -138,6 +153,7 @@ class getmessage(View):
+ def deletemessage(request):
+     message_id = request.POST['id']
+     user = request.user.id
++    # А может просто Messages.objects.filter(...).delete() ?
+     user_message = Messages.objects.filter(id=message_id, user=user)
+     user_message.delete()
+     return HttpResponse('message sent')
+@@ -148,6 +164,7 @@ def updatemessage(request):
+     text = request.POST['text']
+     message_id = request.POST['id']
+     user = request.user
++    # А может просто Messages.objects.get(...).update(...) ?
+     update_message = Messages.objects.get(id=message_id, user=user)
+     update_message.textChanged = text
+     update_message.changed = True
+-- 
+2.39.2
+
